@@ -90,6 +90,21 @@ const loginUser = async (req, res) => {
   }
 };
 
+const logout = async (req, res) => {
+  try {
+    // Clear the cookie
+    res.cookie("token", "", {
+      httpOnly: true,
+      maxAge: 0,
+    });
+
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 const getUserProfile = async (req, res) => {
   try {
     return res.status(200).json({
@@ -103,4 +118,4 @@ const getUserProfile = async (req, res) => {
   }
 };
 
-export { registerUser, loginUser, getUserProfile };
+export { registerUser, loginUser, logout, getUserProfile };
