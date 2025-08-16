@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import api from "../lib/axiosInstance.js";
+import axiosInstance from "../lib/axiosInstance.js";
 import toast from "react-hot-toast";
 
 export const useTransactionStore = create((set) => ({
@@ -7,11 +7,10 @@ export const useTransactionStore = create((set) => ({
   isLoading: false,
   error: null,
 
-  // Fetch all transactions for the authenticated user
   fetchTransactions: async () => {
     try {
       set({ isLoading: true, error: null });
-      const response = await api.get("/transactions");
+      const response = await axiosInstance.get("/transactions");
       set({ transactions: response.data, isLoading: false });
     } catch (error) {
       console.error("Failed to fetch transactions:", error);
@@ -20,45 +19,50 @@ export const useTransactionStore = create((set) => ({
     }
   },
 
-  // Add a new transaction
   addTransaction: async (newTransaction) => {
     try {
-      const response = await api.post("/transactions/create-transaction", newTransaction);
-      set((state) => ({ transactions: [response.data, ...state.transactions] }));
+      const response = await axiosInstance.post("/transactions/create-transaction", newTransaction);
+      const newTransactionData = response.data;
+      
+      set((state) => ({ transactions: [newTransactionData, ...state.transactions] }));
       toast.success("Transaction added successfully!");
+      return true;
     } catch (error) {
       console.error("Failed to add transaction:", error);
       toast.error(error.response?.data?.message || "Failed to add transaction.");
+      return false;
     }
   },
 
-  // Update an existing transaction
   updateTransaction: async (id, updatedData) => {
     try {
-      const response = await api.put(`/transactions/update-transaction/${id}`, updatedData);
+      const response = await axiosInstance.put(`/transactions/update-transaction/${id}`, updatedData);
       set((state) => ({
         transactions: state.transactions.map((t) =>
           t._id === id ? response.data : t
         ),
       }));
       toast.success("Transaction updated successfully!");
+      return true;
     } catch (error) {
       console.error("Failed to update transaction:", error);
       toast.error(error.response?.data?.message || "Failed to update transaction.");
+      return false;
     }
   },
 
-  // Delete a transaction
   deleteTransaction: async (id) => {
     try {
-      await api.delete(`/transactions/delete-transaction/${id}`);
+      await axiosInstance.delete(`/transactions/delete-transaction/${id}`);
       set((state) => ({
         transactions: state.transactions.filter((t) => t._id !== id),
       }));
       toast.success("Transaction deleted successfully!");
+      return true;
     } catch (error) {
       console.error("Failed to delete transaction:", error);
       toast.error(error.response?.data?.message || "Failed to delete transaction.");
+      return false;
     }
   },
 }));

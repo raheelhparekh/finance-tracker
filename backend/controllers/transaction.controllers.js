@@ -34,7 +34,7 @@ const createTransaction = async (req, res) => {
         .json({ message: "Category not found or does not belong to you" });
     }
 
-    const transaction = await Transaction.create({
+    let transaction = await Transaction.create({
       user: req.user._id,
       type,
       amount,
@@ -42,6 +42,9 @@ const createTransaction = async (req, res) => {
       description,
       date,
     });
+
+    // Populate the category field before sending the response
+    transaction = await transaction.populate("category", "name type");
 
     return res.status(201).json(transaction);
   } catch (error) {
@@ -68,8 +71,8 @@ const updateTransaction = async (req, res) => {
     const updatedTransaction = await Transaction.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true },
-    );
+      { new: true }
+    ).populate("category", "name type");
 
     return res.status(200).json(updatedTransaction);
   } catch (error) {
