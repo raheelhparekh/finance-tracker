@@ -12,8 +12,8 @@ const generateToken = (id) => {
 const cookieOptions = {
   httpOnly: true,
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // Allow cross-site cookies in production
-  secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+  secure: process.env.NODE_ENV === 'production', // Set to true in production (HTTPS)
+  sameSite: 'none', // Allow cross-origin cookies in production
 };
 
 const registerUser = async (req, res) => {
@@ -91,10 +91,10 @@ const loginUser = async (req, res) => {
 
 const logout = async (req, res) => {
   try {
-    // Clear the cookie
+    // Clear the cookie with the same options used to set it
     res.cookie("token", "", {
       httpOnly: true,
-      expires: new Date(0), // expiry to past date
+      expires: new Date(0),
     });
 
     return res.status(200).json({ message: "Logged out successfully" });
