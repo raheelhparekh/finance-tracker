@@ -2,6 +2,14 @@
 
 A comprehensive full-stack web application for managing personal finances with transaction tracking, category management, and detailed analytics visualization.
 
+## 🌐 Live Demo
+
+**🚀 Application is now live!**
+
+- **Frontend (Vercel)**: [https://finance-tracker-smoky-seven.vercel.app](https://finance-tracker-smoky-seven.vercel.app)
+- **Backend (Render)**: [https://finance-tracker-oo3x.onrender.com](https://finance-tracker-oo3x.onrender.com)
+- **API Health Check**: [https://finance-tracker-oo3x.onrender.com/api/v1/health](https://finance-tracker-oo3x.onrender.com/api/v1/health)
+
 ## 🚀 Features
 
 ### Core Functionality
@@ -299,6 +307,58 @@ npm run preview # Preview production build
 
 ## 🚀 Deployment
 
+### Live Application
+
+The application is deployed and accessible at:
+
+- **Frontend**: Deployed on **Vercel**
+  - URL: [https://finance-tracker-smoky-seven.vercel.app](https://finance-tracker-smoky-seven.vercel.app)
+  - Auto-deployment from `main` branch
+  - Environment variables configured for production
+
+- **Backend**: Deployed on **Render**
+  - URL: [https://finance-tracker-oo3x.onrender.com](https://finance-tracker-oo3x.onrender.com)
+  - API Base URL: [https://finance-tracker-oo3x.onrender.com/api/v1](https://finance-tracker-oo3x.onrender.com/api/v1)
+  - Health Check: [https://finance-tracker-oo3x.onrender.com/api/v1/health](https://finance-tracker-oo3x.onrender.com/api/v1/health)
+
+### Deployment Configuration
+
+#### Frontend (Vercel)
+The frontend is configured with the following environment variables:
+```env
+VITE_BACKEND_URL=https://finance-tracker-oo3x.onrender.com/api/v1
+```
+
+#### Backend (Render)
+The backend is configured with production environment variables:
+```env
+NODE_ENV=production
+FRONTEND_URL=https://finance-tracker-smoky-seven.vercel.app
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/finance-tracker
+JWT_SECRET=your-production-jwt-secret
+PORT=8000
+```
+
+### Deployment Features
+- ✅ **HTTPS**: Both frontend and backend use secure HTTPS connections
+- ✅ **CORS**: Properly configured for cross-origin requests
+- ✅ **Environment Variables**: Production-ready configuration
+- ✅ **Database**: MongoDB Atlas cloud database
+- ✅ **Authentication**: JWT tokens with secure cookie handling
+### Deployment Notes
+
+#### Cross-Origin Cookie Configuration
+Due to frontend (Vercel) and backend (Render) being on different domains, special configuration was implemented:
+
+1. **Cookie Settings**: `sameSite: 'none'` and `secure: true` for cross-origin cookies
+2. **CORS Configuration**: Enhanced CORS setup with credentials support
+3. **Authentication**: JWT tokens with httpOnly cookies for security
+
+#### Known Issues & Solutions
+- **Cookie Persistence**: Implemented proper cross-origin cookie handling
+- **HTTPS Requirements**: Both deployments use HTTPS for secure cookie transmission
+- **Session Management**: Configured for cross-domain authentication
+
 ### Production Environment Variables
 
 For production deployment, update environment variables:
@@ -309,6 +369,13 @@ FRONTEND_URL=https://your-domain.com
 JWT_SECRET=your-production-jwt-secret-512-bit-key
 COOKIE_SECURE=true
 ```
+
+### Local Development vs Production
+
+| Environment | Frontend URL | Backend URL | Database |
+|-------------|--------------|-------------|----------|
+| **Local Development** | `http://localhost:5173` | `http://localhost:8000` | Local MongoDB or Atlas |
+| **Production** | `https://finance-tracker-smoky-seven.vercel.app` | `https://finance-tracker-oo3x.onrender.com` | MongoDB Atlas |
 
 ### Build Commands
 ```bash
@@ -365,24 +432,13 @@ curl http://localhost:8000/api/v1/health
 docker exec -it mern-backend env
 ```
 
-## 📄 License
 
-This project is licensed under the ISC License.
+## 🔗 Important Links
 
-## 👥 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📞 Support
-
-For support and questions:
-- Create an issue in the GitHub repository
-- Check the troubleshooting section above
-- Review the API documentation for endpoint details
+- **GitHub Repository**: [https://github.com/raheelhparekh/quantafile_assignment](https://github.com/raheelhparekh/quantafile_assignment)
+- **Frontend (Vercel)**: [https://finance-tracker-smoky-seven.vercel.app](https://finance-tracker-smoky-seven.vercel.app)
+- **Backend (Render)**: [https://finance-tracker-oo3x.onrender.com](https://finance-tracker-oo3x.onrender.com)
+- **API Health**: [https://finance-tracker-oo3x.onrender.com/api/v1/health](https://finance-tracker-oo3x.onrender.com/api/v1/health)
 
 ---
 
