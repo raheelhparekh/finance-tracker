@@ -8,12 +8,13 @@ const generateToken = (id) => {
   });
 };
 
-// Cookie options for production
+const isProduction = process.env.NODE_ENV === "production";
+
 const cookieOptions = {
   httpOnly: true,
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  secure: process.env.NODE_ENV === 'production', // Set to true in production (HTTPS)
-  sameSite: 'none', // Allow cross-origin cookies in production
+  secure: isProduction, // Set to true in production (HTTPS)
+  sameSite: isProduction ? "none" : "lax", // "none" allows cross-domain cookies
 };
 
 const registerUser = async (req, res) => {
@@ -92,9 +93,10 @@ const loginUser = async (req, res) => {
 const logout = async (req, res) => {
   try {
     // Clear the cookie with the same options used to set it
-    res.cookie("token", "", {
+    res.clearCookie("token", {
       httpOnly: true,
-      expires: new Date(0),
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     });
 
     return res.status(200).json({ message: "Logged out successfully" });
