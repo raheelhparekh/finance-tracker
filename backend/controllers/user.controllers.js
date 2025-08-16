@@ -2,11 +2,18 @@ import User from "../models/user.models.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
-// Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
+};
+
+// Cookie options for production
+const cookieOptions = {
+  httpOnly: true,
+  maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  sameSite: 'strict', // Protect against CSRF attacks
+  secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
 };
 
 const registerUser = async (req, res) => {
@@ -35,11 +42,7 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: "user could not be created" });
     }
 
-    // Set the JWT as an HTTP-only cookie
-    res.cookie("token", generateToken(user._id), {
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
+    res.cookie("token", generateToken(user._id), cookieOptions);
 
     return res.status(201).json({
       _id: user._id,
@@ -73,11 +76,7 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Set the JWT as an HTTP-only cookie
-    res.cookie("token", generateToken(user._id), {
-      httpOnly: true,
-      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-    });
+    res.cookie("token", generateToken(user._id), cookieOptions);
 
     return res.status(200).json({
       _id: user._id,
@@ -95,7 +94,7 @@ const logout = async (req, res) => {
     // Clear the cookie
     res.cookie("token", "", {
       httpOnly: true,
-      maxAge: 0,
+      expires: new Date(0), // expiry to past date
     });
 
     return res.status(200).json({ message: "Logged out successfully" });
