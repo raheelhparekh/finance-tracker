@@ -12,7 +12,7 @@ const generateToken = (id) => {
 const cookieOptions = {
   httpOnly: true,
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  sameSite: 'strict', // Protect against CSRF attacks
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict', // Allow cross-site cookies in production
   secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
 };
 
